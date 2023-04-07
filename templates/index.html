@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculatrice Vocale</title>
+    <style>
+        body {
+            background-color: #E8F1F2;
+            color: #1B2A47;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #1B2A47;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: 36px;
+            color: #E8F1F2;
+        }
+        h2 {
+            margin-top: 30px;
+            font-size: 24px;
+        }
+        section {
+            margin: 30px auto;
+            max-width: 600px;
+            padding: 0 20px;
+            border-radius: 20px;
+            background-color: #FFFFFF;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            border-radius: 20px;
+            border: none;
+            padding: 10px;
+            width: 70%;
+            font-size: 20px;
+            margin-right: 10px;
+        }
+        button {
+            background-color: #1B2A47;
+            border-radius: 20px;
+            border: none;
+            color: #E8F1F2;
+            cursor: pointer;
+            font-size: 20px;
+            margin-top: 80px;
+            padding: 10px 20px;
+            margin-left: 30%;
+            transition: background-color 0.3s ease;
+        }
+
+        button.calculer{
+            top: 30px;
+            margin-left: 100px;
+        }
+
+        button:hover {
+            background-color: #E8F1F2;
+            color: #1B2A47;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Calculatrice Vocale</h1>
+    </header>
+    <section>
+        <h2>Entrez votre calcul ci-dessous :</h2>
+        <div>
+            <input type="text" id="input" placeholder="Exemple: 2+2" onclick="afficherBouton()">
+        </div>
+        <p id="resultat"></p>
+        <div>
+            <button onclick="calculer()" class="calculer">Calculer</button>
+            <button onclick="enregistrer()">Parlez</button>
+            <!-- <button onclick="effacer()">Effacer</button> -->
+        </div>
+        
+        <script>
+            function effacer() {
+                document.getElementById("input").value = "";
+                document.getElementById("resultat").innerHTML = "";
+                
+            }
+        </script>
+        
+<script>
+            function afficherBouton() {
+              document.getElementById("historique").style.display = "block";
+              
+            }
+          </script>
+    </section>
+    <script>
+        function calculer() {
+            var input = document.getElementById("input").value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/traiter');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                document.getElementById("resultat").innerHTML = "Le résultat est : " + xhr.responseText;
+                // Synthèse vocale pour lire le résultat à voix haute
+                var msg = new SpeechSynthesisUtterance(xhr.responseText);
+                window.speechSynthesis.speak(msg);
+            };
+            xhr.send('texte_vocal=' + encodeURIComponent(input));
+        }
+
+        function enregistrer() {
+            document.getElementById("input").value = "";
+    document.getElementById("resultat").innerHTML = "";
+
+            var recognition = new webkitSpeechRecognition
+        recognition.lang = "fr-FR";
+        recognition.onresult = function(event) {
+        var resultat = event.results[0][0].transcript;
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/traiter');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            document.getElementById("resultat").innerHTML = "Le résultat est : " + xhr.responseText;
+            // Synthèse vocale pour lire le résultat à voix haute
+            var msg = new SpeechSynthesisUtterance(xhr.responseText);
+            window.speechSynthesis.speak(msg);
+        };
+        xhr.send('texte_vocal=' + encodeURIComponent(resultat));
+    }
+    recognition.start();
+}
+
+	</script>
+
+<!-- synthese vocal pour lire a voix haute -->
+
+<script>
+    function calculer() {
+        var input = document.getElementById("input").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/traiter');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            document.getElementById("resultat").innerHTML = "Le résultat est : " + xhr.responseText;
+            // Synthèse vocale pour lire le résultat à voix haute
+            var msg = new SpeechSynthesisUtterance(xhr.responseText);
+            window.speechSynthesis.speak(msg);
+        };
+        xhr.send('texte_vocal=' + encodeURIComponent(input));
+    }
+    </script>
+    
+
+    <!-- history -->
+
+    <form action="{{ url_for('history') }}" method="GET">
+        <button type="submit">Historique des calculs</button>
+    </form> 
+        
+    
+</body>
+</html>

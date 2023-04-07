@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+css
+Copy code
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #1B2A47;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #ddd;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+</head>
+<body>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+        var items = document.getElementsByClassName('historique-calcul');
+        var numToShow = 5;
+        var buttonShowMore = document.getElementById('show-more');
+        var buttonShowLess = document.getElementById('show-less');
+        var numInList = items.length;
+
+    for (var i = numToShow; i < numInList; i++) {
+        items[i].classList.add('hidden');
+    }
+
+    buttonShowMore.addEventListener('click', function() {
+        var numToShowNow = Math.min(numToShow + 5, numInList);
+        for (var i = numToShow; i < numToShowNow; i++) {
+            items[i].classList.remove('hidden');
+        }
+        numToShow = numToShowNow;
+        if (numToShow === numInList) {
+            buttonShowMore.style.display = 'none';
+            buttonShowLess.style.display = 'inline-block';
+        }
+    });
+
+    buttonShowLess.addEventListener('click', function() {
+        var numToShowNow = Math.max(numToShow - 5, 5);
+        for (var i = numToShow - 1; i >= numToShowNow; i--) {
+            items[i].classList.add('hidden');
+        }
+        numToShow = numToShowNow;
+        if (numToShow === 5) {
+            buttonShowMore.style.display = 'inline-block';
+            buttonShowLess.style.display = 'none';
+        }
+    });
+});
+
+// function supprimerLigne(button) {
+//   var row = button.parentNode.parentNode;
+//   row.parentNode.removeChild(row);
+// }
+</script>
+<h1>Historique des calculs</h1>
+{% if historique_calculs %}
+<table>
+    <thead>
+    <tr>
+        <th>Calcul</th>
+        <th>Résultat</th>
+        <th>Date et heure</th>
+        <th>Supprimer</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for calcul in historique_calculs %}
+    <tr class="historique-calcul">
+        <td>{{ calcul[0] }}</td>
+        <td>{{ calcul[1] }}</td>
+        <td>{{ calcul[2] }}</td>
+        <td>
+            <form action="{{ url_for('supprimer_calcul') }}" method="post">
+                <input type="hidden" name="id" value="{{ calcul[0] }}">
+                <button type="submit">Supprimer</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="show-more-less-buttons">
+    <button id="show-more">Voir plus</button>
+    <button id="show-less" class="hidden">Voir moins</button>
+
+</div>
+{% else %}
+<p>Aucun calcul dans l'historique pour le moment.</p>
+{% endif %}
+</body>
+</html>

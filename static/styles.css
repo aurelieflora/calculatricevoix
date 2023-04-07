@@ -1,0 +1,85 @@
+/* Définition de la police de caractères */
+body {
+    font-family: Arial, sans-serif;
+    }
+    
+    /* Centrage de la calculatrice */
+    form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    }
+    
+    /* Style des étiquettes de formulaire */
+    label {
+    margin-top: 10px;
+    font-weight: bold;
+    }
+    
+    /* Style des champs de formulaire */
+    input[type="number"], select {
+    margin: 10px 0;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    }
+    
+    /* Style du bouton de soumission */
+    input[type="submit"] {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    }
+    
+    /* Style des messages d'erreur */
+    input:invalid {
+    border-color: red;
+    }
+    
+    input:invalid + span::before {
+    content: "⚠️ ";
+    color: red;
+    font-weight: bold;
+    }
+    
+    /* Pour la page calculator_result.html */
+    h2 {
+    margin-top: 50px;
+    font-size: 24px;
+    font-weight: bold;
+    }
+    
+    table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 80%;
+    }
+    
+    th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    }
+    
+    th {
+    background-color: #4CAF50;
+    color: white;
+    }
+    
+    /* Pour le bouton de retour */
+    button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    }
